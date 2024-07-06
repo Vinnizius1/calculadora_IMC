@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- ícone da iTalents no topo da página -->
+    <link rel="icon" href="./assets/italentsbr_logo-removebg-preview.png" />
+    <!-- arquivo css -->
+    <link rel="stylesheet" href="styles.css" />
+
+    <title>Calculadora IMC - Atividade 1 da iTalents</title>
+  </head>
+  <body>
+    <!-- container principal -->
+    <main class="container">
+      <img
+        src="assets/italentsbr_logo-removebg-preview.png"
+        alt="Logo iTalents"
+        class="logo"
+      />
+      <h1 class="title">Qual o seu IMC?</h1>
+
+      <!-- formulário -->
+      <form class="form">
+        <label for="peso">Insira o seu peso:</label>
+        <input
+          type="number"
+          placeholder="Exemplo: 70"
+          min="35"
+          max="250"
+          class="input"
+          id="peso"
+          required
+        />
+        <label for="altura">Insira a sua altura:</label>
+        <input
+          type="number"
+          placeholder="Exemplo: 1,80"
+          min="1.20"
+          max="2.40"
+          step="0.1"
+          class="input"
+          id="altura"
+          required
+        />
+
+        <button class="button" type="submit">Calcular</button>
+      </form>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
