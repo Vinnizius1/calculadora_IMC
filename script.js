@@ -4,8 +4,15 @@ const inputAltura = document.getElementById("altura");
 const btnCalcular = document.querySelector(".button");
 const resultadoTitulo = document.querySelector(".result-title");
 const resultadoNumeros = document.querySelector(".result-numbers");
+const mostraResultado = document.querySelector(".result");
 
 ////
+// Verifica se já existe o display de resultado
+function displayResultado() {
+  if (mostraResultado.classList.contains("visible")) {
+    mostraResultado.classList.remove("visible");
+  }
+}
 
 /* Manipulando o placeholder dos inputs */
 const inputs = document.querySelectorAll("input");
@@ -14,6 +21,7 @@ const inputs = document.querySelectorAll("input");
 function handleFocus() {
   this.dataset.placeholder = this.placeholder;
   this.placeholder = "";
+  displayResultado();
 }
 
 // Função para restaurar placeholder quando o foco é perdido
@@ -55,14 +63,11 @@ btnCalcular.addEventListener("click", function (e) {
   }
 
   // elementos para o display do resultado
-  const bgResultado = document.querySelector(".result");
   const tituloResultado = document.querySelector(".result-title");
   const imcResultado = document.querySelector(".result-numbers");
 
   // confere se alguém já calculou IMC e então remove novamente a tela de resultado
-  if (bgResultado.classList.contains("visible")) {
-    bgResultado.classList.remove("visible");
-  }
+  displayResultado();
 
   // Remove a vírgula e converte a altura para tipo "number" e então faz o cálculo do IMC
   const altura = parseFloat(inputAltura.value.replace(",", "."));
@@ -90,8 +95,8 @@ btnCalcular.addEventListener("click", function (e) {
   imcResultado.textContent = `IMC= ${imc}`;
 
   // alterações na cor do background e na visibilidade do IMC
-  bgResultado.className = `result ${corClassificacao}`;
-  bgResultado.classList.add("visible");
+  mostraResultado.className = `result ${corClassificacao}`;
+  mostraResultado.classList.add("visible");
 
   // zera os campos
   inputPeso.value = inputAltura.value = "";
