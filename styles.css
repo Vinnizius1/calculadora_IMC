@@ -9,7 +9,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(to bottom, #ffffff 0%, #ffffff 50%, #58BEE3 70%, #58BEE3 100%);
+    background: linear-gradient(to bottom, #ffffff 0%, #ffffff 40%, #58BEE3 70%, #58BEE3 100%);
 
 }
 
@@ -38,7 +38,6 @@ body {
 .input {
     width: 100%;
     height: 40px;
-    /* border: 1px solid #58BEE3; */
     border-radius: 10px;
     border: 0;
     font-size: 15px;
@@ -51,7 +50,6 @@ body {
 }
 
 .input:focus {
-    /* border: 1px solid transparent; */
     background-color: #e0f7fa;
 }
 
@@ -64,4 +62,51 @@ body {
     color: #000;
     font-size: 20px;
     font-weight: bold;
+    cursor: pointer;
+}
+
+.result {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px 25px;
+    border-radius: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    margin: 25px 0;
+    height: 6.7rem;
+    /* Inicialmente invisível */
+    visibility: hidden;
+    transition: transform 0.8s;
+}
+
+.result.visible {
+    visibility: visible;
+}
+
+.result:hover {
+    transform: scale(1.1);
+}
+
+.result.verde {
+    background-color: green;
+}
+
+.result.amarelo {
+    background-color: yellow;
+}
+
+.result.vermelho {
+    background-color: red;
+}
+
+.result-title {
+    font-weight: bold;
+    font-size: 25px;
+    margin-bottom: 15px;
+}
+
+.result-numbers {
+    font-weight: bold;
+    font-size: 20px;
 }
