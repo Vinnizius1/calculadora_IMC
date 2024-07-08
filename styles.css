@@ -56,13 +56,31 @@ body {
 .button {
     width: 100%;
     height: 40px;
-    background-color: #e7e7e7;
     border: 0;
     border-radius: 10px;
-    color: #000;
     font-size: 20px;
     font-weight: bold;
     cursor: pointer;
+    transition: background-color 0.7s ease;
+}
+
+.calcular {
+    background-color: #e7e7e7;
+    color: #000;
+}
+
+.calcular:hover {
+    background-color: #FFF;
+}
+
+.resetar {
+    background-color: #000;
+    color: white;
+    margin-top: 5px;
+}
+
+.resetar:hover {
+    background-color: #212121;
 }
 
 .result {

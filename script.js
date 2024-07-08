@@ -2,11 +2,30 @@
 const inputPeso = document.getElementById("peso");
 const inputAltura = document.getElementById("altura");
 const btnCalcular = document.querySelector(".button");
+const btnResetar = document.querySelector(".button.resetar");
 const resultadoTitulo = document.querySelector(".result-title");
 const resultadoNumeros = document.querySelector(".result-numbers");
 const mostraResultado = document.querySelector(".result");
 
 ////
+// Verifica se os dados inseridos são válidos
+function verificaDados() {
+  const altura = parseFloat(inputAltura.value);
+  const peso = parseFloat(inputPeso.value);
+
+  if (isNaN(altura) || isNaN(peso)) {
+    alert("Por favor insira valores numéricos válidos!");
+    return true;
+  }
+
+  if (altura <= 0 || peso <= 0) {
+    alert("Por favor insira valores positivos maiores que zero!");
+    return true;
+  }
+
+  return false;
+}
+
 // Verifica se já existe o display de resultado
 function displayResultado() {
   if (mostraResultado.classList.contains("visible")) {
@@ -57,10 +76,8 @@ inputAltura.addEventListener("input", function () {
 // Botão calcular
 btnCalcular.addEventListener("click", function (e) {
   e.preventDefault();
-  if (inputAltura.value === "" || inputPeso.value === "") {
-    alert("Por favor preencha os 2 campos para fazer o cálculo!");
-    return;
-  }
+
+  if (verificaDados()) return;
 
   // elementos para o display do resultado
   const tituloResultado = document.querySelector(".result-title");
@@ -100,4 +117,13 @@ btnCalcular.addEventListener("click", function (e) {
 
   // zera os campos
   inputPeso.value = inputAltura.value = "";
+});
+
+// Botão resetar
+btnResetar.addEventListener("click", function (e) {
+  e.preventDefault();
+
+  inputPeso.value = "";
+  inputAltura.value = "";
+  displayResultado();
 });
