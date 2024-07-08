@@ -48,7 +48,7 @@ inputAltura.addEventListener("input", function () {
   if (alturaFormatada.length >= 2) {
     // Adiciona vírgula após o primeiro dígito
     alturaFormatada =
-      alturaFormatada.slice(0, 1) + "," + alturaFormatada.slice(1);
+      alturaFormatada.slice(0, 1) + "." + alturaFormatada.slice(1);
   }
 
   inputAltura.value = alturaFormatada;
@@ -70,7 +70,7 @@ btnCalcular.addEventListener("click", function (e) {
   displayResultado();
 
   // Remove a vírgula e converte a altura para tipo "number" e então faz o cálculo do IMC
-  const altura = parseFloat(inputAltura.value.replace(",", "."));
+  const altura = parseFloat(inputAltura.value);
   const imc = (inputPeso.value / Math.pow(altura, 2)).toFixed(2);
 
   // lógica do cálculo
