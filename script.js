@@ -1,13 +1,20 @@
-// Elementos
+/* Elementos */
 const inputPeso = document.getElementById("peso");
 const inputAltura = document.getElementById("altura");
+
 const btnCalcular = document.querySelector(".button");
 const btnResetar = document.querySelector(".button.resetar");
-const resultadoTitulo = document.querySelector(".result-title");
-const resultadoNumeros = document.querySelector(".result-numbers");
+
 const mostraResultado = document.querySelector(".result");
+const tituloResultado = document.querySelector(".result-title");
+const imcResultado = document.querySelector(".result-numbers");
+
+const inputs = document.querySelectorAll("input");
 
 ////
+
+/* Funções auxiliares */
+
 // Verifica se os dados inseridos são válidos
 function verificaDados() {
   const altura = parseFloat(inputAltura.value);
@@ -33,9 +40,6 @@ function displayResultado() {
   }
 }
 
-/* Manipulando o placeholder dos inputs */
-const inputs = document.querySelectorAll("input");
-
 // Função para remover placeholder no foco
 function handleFocus() {
   this.dataset.placeholder = this.placeholder;
@@ -57,6 +61,7 @@ inputs.forEach(input => {
 ////
 
 /* Gerenciadores de evento */
+
 // Formatação do input tipo "texto" da altura
 inputAltura.addEventListener("input", function () {
   let alturaFormatada = inputAltura.value.trim();
@@ -78,10 +83,6 @@ btnCalcular.addEventListener("click", function (e) {
   e.preventDefault();
 
   if (verificaDados()) return;
-
-  // elementos para o display do resultado
-  const tituloResultado = document.querySelector(".result-title");
-  const imcResultado = document.querySelector(".result-numbers");
 
   // confere se alguém já calculou IMC e então remove novamente a tela de resultado
   displayResultado();
@@ -121,8 +122,6 @@ btnCalcular.addEventListener("click", function (e) {
 
 // Botão resetar
 btnResetar.addEventListener("click", function (e) {
-  e.preventDefault();
-
   inputPeso.value = "";
   inputAltura.value = "";
   displayResultado();
