@@ -25,16 +25,19 @@
         <label for="peso">Insira o seu peso:</label>
         <input
           type="number"
-          placeholder="Exemplo: 70"
+          step="1"
+          placeholder="Digite valores inteiros, por exemplo: 70"
           class="input"
           id="peso"
+          max="200"
+          title="O peso não pode ser superior a 200"
           required
         />
         <label for="altura">Insira a sua altura:</label>
         <input
           type="number"
           step="0.01"
-          placeholder="Exemplo: 1,80"
+          placeholder="Digite a sua altura"
           class="input"
           id="altura"
           required

@@ -11,27 +11,45 @@ const imcResultado = document.querySelector(".result-numbers");
 
 const inputs = document.querySelectorAll("input");
 
-////
+/* */
 
-/* Funções auxiliares */
+// Cria a variável com escopo fora da próxima função "if"
+let timeoutId;
 
-// Verifica se os dados inseridos são válidos
 function verificaDados() {
-  const altura = parseFloat(inputAltura.value);
-  const peso = parseFloat(inputPeso.value);
+  const altura = inputAltura.value;
+  const peso = inputPeso.value;
 
-  if (isNaN(altura) || isNaN(peso)) {
-    alert("Por favor insira valores numéricos válidos!");
+  if (peso === "" || altura === "") {
+    alert("Preencha os campos!");
     return true;
   }
 
-  if (altura <= 0 || peso <= 0) {
+  // if (isNaN(altura) || isNaN(peso)) {
+  //   alert("Por favor insira valores numéricos válidos!");
+  //   return true;
+  // }
+
+  if (Number(altura) <= 0 || +peso <= 0) {
     alert("Por favor insira valores positivos maiores que zero!");
     return true;
   }
 
   return false;
 }
+
+inputPeso.addEventListener("keydown", event => {
+  if (event.key === "," || event.key === ".") {
+    event.preventDefault();
+  }
+});
+inputAltura.addEventListener("keydown", event => {
+  if (event.key === "," || event.key === ".") {
+    event.preventDefault();
+  }
+});
+
+//
 
 // Verifica se já existe o display de resultado
 function displayResultado() {
@@ -44,6 +62,7 @@ function displayResultado() {
 function handleFocus() {
   this.dataset.placeholder = this.placeholder;
   this.placeholder = "";
+  cancelarTimeout();
   displayResultado();
 }
 
@@ -61,18 +80,29 @@ inputs.forEach(input => {
 ////
 
 /* Gerenciadores de evento */
+inputPeso.addEventListener("input", function () {
+  let peso = inputPeso.value.replace(/\D/g, ""); // Remove qualquer caractere que não seja número
 
-// Formatação do input tipo "texto" da altura
-inputAltura.addEventListener("input", function () {
+  inputPeso.value = peso;
+});
+
+// Formatação do input tipo "texto" da altura (na verdade, agora é do tipo "number"... está funcionando)
+inputAltura.addEventListener("input", function (event) {
   let alturaFormatada = inputAltura.value.trim();
 
   // Remove qualquer caractere que não seja um número
   alturaFormatada = alturaFormatada.replace(/[^\d]/g, "");
 
+  //
   if (alturaFormatada.length >= 2) {
     // Adiciona vírgula após o primeiro dígito
     alturaFormatada =
       alturaFormatada.slice(0, 1) + "." + alturaFormatada.slice(1);
+
+    //
+    if (event.inputType === "deleteContentBackward") {
+      alturaFormatada = "";
+    }
   }
 
   inputAltura.value = alturaFormatada;
@@ -82,16 +112,22 @@ inputAltura.addEventListener("input", function () {
 btnCalcular.addEventListener("click", function (e) {
   e.preventDefault();
 
-  if (verificaDados()) return;
+  //
+  if (verificaDados()) {
+    inputPeso.focus();
+    return;
+  }
 
-  // confere se alguém já calculou IMC e então remove novamente a tela de resultado
+  // Confere se alguém já calculou IMC e então remove novamente a tela de resultado
   displayResultado();
 
-  // Remove a vírgula e converte a altura para tipo "number" e então faz o cálculo do IMC
-  const altura = parseFloat(inputAltura.value);
-  const imc = (inputPeso.value / Math.pow(altura, 2)).toFixed(2);
+  // Converte o "imc" para tipo "number"
+  let peso = inputPeso.value;
 
-  // lógica do cálculo
+  const altura = inputAltura.value;
+  const imc = +(peso / Math.pow(altura, 2)).toFixed(2);
+
+  // Lógica do cálculo
   let classificacao;
   let corClassificacao;
   if (imc < 18.5) {
@@ -108,21 +144,60 @@ btnCalcular.addEventListener("click", function (e) {
     corClassificacao = "vermelho";
   }
 
-  // display do resultado
+  // Display do resultado
   tituloResultado.textContent = classificacao;
   imcResultado.textContent = `IMC= ${imc}`;
 
-  // alterações na cor do background e na visibilidade do IMC
+  // Alterações na cor do background e na visibilidade do IMC
   mostraResultado.className = `result ${corClassificacao}`;
   mostraResultado.classList.add("visible");
 
-  // zera os campos
+  // Zera os campos
   inputPeso.value = inputAltura.value = "";
+
+  // Pergunta ao usuário se ele quer saber quanto peso deve perder ou ganhar para chegar no PESO IDEAL
+  if (imc < 18.5 || imc > 24.9) {
+    // setTimeout() de 2 segundos para dar um "tempo" pro usuário fazer a leitura do seu IMC
+    timeoutId = setTimeout(() => {
+      const querSaberPesoIdeal = confirm(
+        "Você quer saber quanto peso deve perder ou ganhar para chegar ao peso ideal?"
+      );
+      if (querSaberPesoIdeal) {
+        let pesoIdealMin = +(18.5 * Math.pow(altura, 2)).toFixed(2);
+        let pesoIdealMax = +(24.9 * Math.pow(altura, 2)).toFixed(2);
+        let mensagem;
+
+        if (imc < pesoIdealMin) {
+          mensagem = `Você precisa ganhar pelo menos ${(
+            pesoIdealMin - imc
+          ).toFixed(2)} kg para atingir o peso ideal.`;
+        } else {
+          mensagem = `Você precisa perder pelo menos ${Math.abs(
+            imc - pesoIdealMax
+          ).toFixed(2)} kg para atingir o peso ideal.`;
+          console.log(imc, pesoIdealMax);
+        }
+
+        alert(mensagem);
+      }
+    }, 2000);
+  }
 });
 
+// Função para cancelar o setTimeout
+function cancelarTimeout() {
+  if (timeoutId) {
+    clearTimeout(timeoutId);
+    timeoutId = null;
+  }
+}
+
 // Botão resetar
-btnResetar.addEventListener("click", function (e) {
+btnResetar.addEventListener("click", function () {
   inputPeso.value = "";
   inputAltura.value = "";
+  cancelarTimeout();
   displayResultado();
 });
+
+inputPeso.focus();
