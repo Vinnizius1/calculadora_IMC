@@ -11,6 +11,8 @@ const imcResultado = document.querySelector(".result-numbers");
 
 const inputs = document.querySelectorAll("input");
 
+const form = document.querySelector(".form");
+
 /* */
 
 // Cria a variável com escopo fora da próxima função "if"
@@ -22,16 +24,6 @@ function verificaDados() {
 
   if (peso === "" || altura === "") {
     alert("Preencha os campos!");
-    return true;
-  }
-
-  // if (isNaN(altura) || isNaN(peso)) {
-  //   alert("Por favor insira valores numéricos válidos!");
-  //   return true;
-  // }
-
-  if (Number(altura) <= 0 || +peso <= 0) {
-    alert("Por favor insira valores positivos maiores que zero!");
     return true;
   }
 
@@ -108,10 +100,20 @@ inputAltura.addEventListener("input", function (event) {
   inputAltura.value = alturaFormatada;
 });
 
-// Botão calcular
-btnCalcular.addEventListener("click", function (e) {
-  e.preventDefault();
+////
+////
 
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
+  // Chama a função calcular o IMC
+  calcularIMC();
+
+  //
+  btnResetar.focus();
+});
+
+// Botão calcular
+function calcularIMC() {
   //
   if (verificaDados()) {
     inputPeso.focus();
@@ -121,10 +123,9 @@ btnCalcular.addEventListener("click", function (e) {
   // Confere se alguém já calculou IMC e então remove novamente a tela de resultado
   displayResultado();
 
-  // Converte o "imc" para tipo "number"
+  //
   let peso = inputPeso.value;
-
-  const altura = inputAltura.value;
+  let altura = inputAltura.value;
   const imc = +(peso / Math.pow(altura, 2)).toFixed(2);
 
   // Lógica do cálculo
@@ -156,33 +157,52 @@ btnCalcular.addEventListener("click", function (e) {
   inputPeso.value = inputAltura.value = "";
 
   // Pergunta ao usuário se ele quer saber quanto peso deve perder ou ganhar para chegar no PESO IDEAL
-  if (imc < 18.5 || imc > 24.9) {
-    // setTimeout() de 2 segundos para dar um "tempo" pro usuário fazer a leitura do seu IMC
-    timeoutId = setTimeout(() => {
-      const querSaberPesoIdeal = confirm(
-        "Você quer saber quanto peso deve perder ou ganhar para chegar ao peso ideal?"
-      );
-      if (querSaberPesoIdeal) {
-        let pesoIdealMin = +(18.5 * Math.pow(altura, 2)).toFixed(2);
-        let pesoIdealMax = +(24.9 * Math.pow(altura, 2)).toFixed(2);
-        let mensagem;
+  const mensagemAcimaDoPeso =
+    "Você quer saber quanto peso deve perder para chegar ao peso ideal ?";
+  const mensagemAbaixoDoPeso =
+    "Você quer saber quanto peso deve ganhar para chegar ao peso ideal ?";
 
-        if (imc < pesoIdealMin) {
-          mensagem = `Você precisa ganhar pelo menos ${(
-            pesoIdealMin - imc
-          ).toFixed(2)} kg para atingir o peso ideal.`;
-        } else {
-          mensagem = `Você precisa perder pelo menos ${Math.abs(
-            imc - pesoIdealMax
-          ).toFixed(2)} kg para atingir o peso ideal.`;
-          console.log(imc, pesoIdealMax);
-        }
-
-        alert(mensagem);
-      }
-    }, 2000);
+  // Condição para "abaixo do peso ideal"
+  if (imc < 18.5) {
+    kilosParaPesoIdeal(mensagemAbaixoDoPeso, "abaixo");
   }
-});
+
+  // Condição para "abaixo do peso ideal"
+  if (imc > 24.9) {
+    kilosParaPesoIdeal(mensagemAcimaDoPeso, "acima");
+  }
+}
+
+// Função responsável pelo setTimeout() e a mensagem sobre quanto peso ganhar ou perder
+function kilosParaPesoIdeal(mensagem, identificador) {
+  timeoutId = setTimeout(() => {
+    let pesoIdealMin = +(18.5 * Math.pow(altura, 2)).toFixed(2);
+    let pesoIdealMax = +(24.9 * Math.pow(altura, 2)).toFixed(2);
+
+    // Variável com a resposta de acordo com o argumento "identificador" (se peso acima ou se peso abaixo)
+    let resposta;
+
+    // Variável para guardar a confirmação se o usuário quer ou não ver a recomendação para se chegar ao peso ideal
+    const querSaberPesoIdeal = confirm(mensagem);
+
+    if (querSaberPesoIdeal && identificador === "abaixo") {
+      resposta = `Você precisa ganhar pelo menos ${(
+        pesoIdealMin - peso
+      ).toFixed(2)} kg para atingir o peso ideal.`;
+    } else if (querSaberPesoIdeal && identificador === "acima") {
+      resposta = `Você precisa perder pelo menos ${Math.abs(
+        peso - pesoIdealMax
+      ).toFixed(2)} kg para atingir o peso ideal.`;
+    } else {
+      inputPeso.focus();
+    }
+
+    // Mostra a resposta ao usuário
+    if (resposta) {
+      alert(resposta);
+    }
+  }, 2000);
+}
 
 // Função para cancelar o setTimeout
 function cancelarTimeout() {
@@ -194,10 +214,11 @@ function cancelarTimeout() {
 
 // Botão resetar
 btnResetar.addEventListener("click", function () {
-  inputPeso.value = "";
-  inputAltura.value = "";
+  inputPeso.value = inputAltura.value = "";
   cancelarTimeout();
   displayResultado();
+
+  inputPeso.focus();
 });
 
 inputPeso.focus();

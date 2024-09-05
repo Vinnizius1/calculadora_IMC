@@ -25,6 +25,8 @@
         <label for="peso">Insira o seu peso:</label>
         <input
           type="number"
+          name="peso"
+          min="1"
           step="1"
           placeholder="Digite valores inteiros, por exemplo: 70"
           class="input"
@@ -36,6 +38,8 @@
         <label for="altura">Insira a sua altura:</label>
         <input
           type="number"
+          name="altura"
+          min="1"
           step="0.01"
           placeholder="Digite a sua altura"
           class="input"
@@ -44,8 +48,9 @@
         />
 
         <button class="button calcular" type="submit">Calcular</button>
-        <button class="button resetar">Limpar</button>
       </form>
+      <!-- Botão de reset -->
+      <button class="button resetar">Limpar</button>
 
       <!-- seção do resultado -->
       <section class="result">
