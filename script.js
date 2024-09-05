@@ -19,8 +19,8 @@ const form = document.querySelector(".form");
 let timeoutId;
 
 function verificaDados() {
-  const altura = inputAltura.value;
-  const peso = inputPeso.value;
+  let altura = inputAltura.value;
+  let peso = inputPeso.value;
 
   if (peso === "" || altura === "") {
     alert("Preencha os campos!");
@@ -78,14 +78,14 @@ inputPeso.addEventListener("input", function () {
   inputPeso.value = peso;
 });
 
-// Formatação do input tipo "texto" da altura (na verdade, agora é do tipo "number"... está funcionando)
+// Formatação/Regras para o input altura
 inputAltura.addEventListener("input", function (event) {
   let alturaFormatada = inputAltura.value.trim();
 
   // Remove qualquer caractere que não seja um número
   alturaFormatada = alturaFormatada.replace(/[^\d]/g, "");
 
-  //
+  // Condição para se aplicar a vírgula, ou melhor, ponto após a primeira casa decimal se existir dois ou mais números
   if (alturaFormatada.length >= 2) {
     // Adiciona vírgula após o primeiro dígito
     alturaFormatada =
@@ -124,8 +124,8 @@ function calcularIMC() {
   displayResultado();
 
   //
-  let peso = inputPeso.value;
-  let altura = inputAltura.value;
+  let peso = Number(inputPeso.value);
+  let altura = Number(inputAltura.value);
   const imc = +(peso / Math.pow(altura, 2)).toFixed(2);
 
   // Lógica do cálculo
@@ -164,17 +164,17 @@ function calcularIMC() {
 
   // Condição para "abaixo do peso ideal"
   if (imc < 18.5) {
-    kilosParaPesoIdeal(mensagemAbaixoDoPeso, "abaixo");
+    kilosParaPesoIdeal(mensagemAbaixoDoPeso, "abaixo", peso, altura);
   }
 
   // Condição para "abaixo do peso ideal"
   if (imc > 24.9) {
-    kilosParaPesoIdeal(mensagemAcimaDoPeso, "acima");
+    kilosParaPesoIdeal(mensagemAcimaDoPeso, "acima", peso, altura);
   }
 }
 
 // Função responsável pelo setTimeout() e a mensagem sobre quanto peso ganhar ou perder
-function kilosParaPesoIdeal(mensagem, identificador) {
+function kilosParaPesoIdeal(mensagem, identificador, peso, altura) {
   timeoutId = setTimeout(() => {
     let pesoIdealMin = +(18.5 * Math.pow(altura, 2)).toFixed(2);
     let pesoIdealMax = +(24.9 * Math.pow(altura, 2)).toFixed(2);
@@ -187,11 +187,11 @@ function kilosParaPesoIdeal(mensagem, identificador) {
 
     if (querSaberPesoIdeal && identificador === "abaixo") {
       resposta = `Você precisa ganhar pelo menos ${(
-        pesoIdealMin - peso
+        pesoIdealMin - Number(peso)
       ).toFixed(2)} kg para atingir o peso ideal.`;
     } else if (querSaberPesoIdeal && identificador === "acima") {
       resposta = `Você precisa perder pelo menos ${Math.abs(
-        peso - pesoIdealMax
+        Number(peso) - pesoIdealMax
       ).toFixed(2)} kg para atingir o peso ideal.`;
     } else {
       inputPeso.focus();
