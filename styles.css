@@ -121,8 +121,19 @@ input {
     background-color: yellow;
 }
 
-.result.vermelho {
-    background-color: red;
+.result.vermelho1 {
+    background-color: #FFC0C0;
+    /* Vermelho claro */
+}
+
+.result.vermelho2 {
+    background-color: #FF6666;
+    /* Vermelho médio */
+}
+
+.result.vermelho3 {
+    background-color: #FF0000;
+    /* Vermelho escuro */
 }
 
 .result-title {
